@@ -46,7 +46,7 @@ const LoginScreen = () => {
             Login
           </Button>
           <Text className='text-[16px]'>
-            Dont have an account? <Link href="/register" className='text-blue-500'>Register</Link>
+            Dont have an account? <Link href="/register" className='text-blue-500 font-bold'>Register</Link>
           </Text>
 
         </View>
