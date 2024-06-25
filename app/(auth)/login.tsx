@@ -1,5 +1,5 @@
 import { Link } from 'expo-router';
-import React, { useState } from 'react';
+import React from 'react';
 
 import { View, Text, SafeAreaView, ScrollView, Image } from 'react-native'
 import { TextInput, Button } from 'react-native-paper';
@@ -7,11 +7,7 @@ import { TextInput, Button } from 'react-native-paper';
 
 const LoginScreen = () => {
 
-  const [form, setForm] = useState({
-    email: '',
-    username: '',
-    password: ''
-  })
+  /**  Include State Management Here */
 
   return (
     <SafeAreaView className='h-full bg-white'>
@@ -26,7 +22,7 @@ const LoginScreen = () => {
             className='w-[80%] -mt-8 mb-2'
             mode='outlined'
             label="Email/Username"
-            value={form.email || form.username}
+            value={""}
             activeOutlineColor='black'
             keyboardType='email-address'
           />
@@ -34,7 +30,7 @@ const LoginScreen = () => {
             className='w-[80%] mb-4'
             mode='outlined'
             label="Password"
-            value={form.password}
+            value={""}
             activeOutlineColor='black'
             secureTextEntry={true}
           />
