@@ -4,9 +4,7 @@ interface FormData {
     // Step 1: Boxing Information
     boxingLevel: string;
     gender: string;
-    weightClass: {
-        [key: string]: number;
-    };
+    weightClass: Record<string, string> | null;
 
     // Step 2: Personal Information
     age: string;

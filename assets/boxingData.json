@@ -1,0 +1,78 @@
+{
+  "boxingLevels": ["Amateur", "Professional"],
+  "weightClasses": {
+    "male": {
+      "Amateur": [
+        { "name": "Minimumweight", "weight": "46" },
+        { "name": "Flyweight", "weight": "51" },
+        { "name": "Bantamweight", "weight": "54" },
+        { "name": "Featherweight", "weight": "57" },
+        { "name": "Lightweight", "weight": "60" },
+        { "name": "Light Welterweight", "weight": "63.5" },
+        { "name": "Welterwight", "weight": "67" },
+        { "name": "Light Middleweight", "weight": "71" },
+        { "name": "Middleweight", "weight": "75" },
+        { "name": "Light Heavyweight", "weight": "80" },
+        { "name": "Cruiserweight", "weight": "86" },
+        { "name": "Heavyweight", "weight": "92" },
+        { "name": "Super Heavyweight", "weight": "92+" }
+      ],
+      "Professional": [
+        { "name": "Light Minimumweight", "weight": "46.3" },
+        { "name": "Minimumweight", "weight": "47.6" },
+        { "name": "Light Flyweight", "weight": "49.0" },
+        { "name": "Flyweight", "weight": "50.8" },
+        { "name": "Super Flyweight", "weight": "52.2" },
+        { "name": "Bantamweight", "weight": "53.5" },
+        { "name": "Super Bantamweight", "weight": "55.3" },
+        { "name": "Featherweight", "weight": "57.2" },
+        { "name": "Super Featherweight", "weight": "59.0" },
+        { "name": "Lightweight", "weight": "61.2" },
+        { "name": "Super Lightweight", "weight": "63.5" },
+        { "name": "Welterwight", "weight": "66.7" },
+        { "name": "Super Welterweight", "weight": "69.9" },
+        { "name": "Middleweight", "weight": "72.6" },
+        { "name": "Super Middleweight", "weight": "76.2" },
+        { "name": "Light Heavyweight", "weight": "79.2" },
+        { "name": "Cruiserweight", "weight": "90.7" },
+        { "name": "Bridgerweight", "weight": "101.6" },
+        { "name": "Heavyweight", "weight": "101.6+" }
+      ]
+    },
+    "female": {
+      "Amateur": [
+        { "name": "Minimumweight", "weight": "45" },
+        { "name": "Light Flyweight", "weight": "50" },
+        { "name": "Flyweight", "weight": "52" },
+        { "name": "Bantamweight", "weight": "54" },
+        { "name": "Featherweight", "weight": "57" },
+        { "name": "Lightweight", "weight": "60" },
+        { "name": "Light Welterweight", "weight": "63" },
+        { "name": "Welterwight", "weight": "66" },
+        { "name": "Light Middleweight", "weight": "70" },
+        { "name": "Middleweight", "weight": "75" },
+        { "name": "Light Heavyweight", "weight": "81" },
+        { "name": "Heavyweight", "weight": "91+" }
+      ],
+      "Professional": [
+        { "name": "Light Minimumweight", "weight": "46.3" },
+        { "name": "Minimumweight", "weight": "47.6" },
+        { "name": "Light Flyweight", "weight": "49.0" },
+        { "name": "Flyweight", "weight": "50.8" },
+        { "name": "Super Flyweight", "weight": "52.2" },
+        { "name": "Bantamweight", "weight": "53.5" },
+        { "name": "Super Bantamweight", "weight": "55.2" },
+        { "name": "Featherweight", "weight": "57.2" },
+        { "name": "Super Featherweight", "weight": "59.0" },
+        { "name": "Lightweight", "weight": "61.2" },
+        { "name": "Super Lightweight", "weight": "63.5" },
+        { "name": "Welterwight", "weight": "66.7" },
+        { "name": "Super Welterweight", "weight": "69.9" },
+        { "name": "Middleweight", "weight": "72.6" },
+        { "name": "Super Middleweight", "weight": "76.2" },
+        { "name": "Light Heavyweight", "weight": "79.4" },
+        { "name": "Heavyweight", "weight": "90.7+" }
+      ]
+    }
+  }
+}
