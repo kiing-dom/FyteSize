@@ -16,8 +16,6 @@ type Gender = 'male' | 'female';
 
 const Step1 = () => {
 
-    const router = useRouter();
-
     const { formData, updateFormData, setCurrentStep } = useRegistrationStore();
     const { boxingLevels, weightClasses } = boxingData;
 
