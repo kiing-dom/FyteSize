@@ -60,8 +60,7 @@ const Step1 = () => {
 
 
     return (
-        <SafeAreaView className='h-full bg-white'>
-            <ScrollView>
+        
                 <View className='flex-1 justify-center items-center min-h-[84vh]'>
                     <Text className='text-[20px]'>Step 1: Boxing Information</Text>
 
@@ -103,8 +102,6 @@ const Step1 = () => {
 
 
                 </View>
-            </ScrollView>
-        </SafeAreaView>
     )
 }
 

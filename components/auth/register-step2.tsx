@@ -12,25 +12,22 @@ const Step2 = () => {
     }
 
 
-    
-  return (
-    <SafeAreaView className='h-full bg-white'>
-        <ScrollView>
-            <View className='flex-1 justify-center items-center min-h-[84vh]'>
-                <Text>
-                    Step 2: 
-                </Text>
-                <Button
-                    mode='contained'
-                    buttonColor='gray'
-                    onPress={handlePrevious}
-                >
-                    Previous
-                </Button>
-            </View>
-        </ScrollView>
-    </SafeAreaView>
-  )
-}
 
-export default Step2
+    return (
+        <View className='flex-1 justify-center items-center min-h-[84vh]'>
+            <Text className='text-[20px]'>
+                Step 2: Personal Information
+            </Text>
+            <Button
+                mode='contained'
+                buttonColor='gray'
+                onPress={handlePrevious}
+            >
+                Previous
+            </Button>
+        </View>
+
+    )
+};
+
+export default Step2;
