@@ -87,7 +87,7 @@ const Step2 = () => {
             {/** Modal for Date of Birth */}
             {showDatePicker && (
                 <DateTimePicker
-                    value={formData.dateOfBirth || new Date()}
+                    value={formData.dateOfBirth ? new Date(formData.dateOfBirth) : new Date()}
                     mode="date"
                     display="default"
                     onChange={handleDateSelect}
