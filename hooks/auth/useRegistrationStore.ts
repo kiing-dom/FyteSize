@@ -1,5 +1,10 @@
 import { create } from 'zustand';
 
+interface Measurement {
+    value: number;
+    unit: string;
+}
+
 interface FormData {
     // Step 1: Boxing Information
     boxingLevel: string;
@@ -7,9 +12,9 @@ interface FormData {
     weightClass: Record<string, string> | null;
 
     // Step 2: Personal Information
-    age: string;
-    height: string;
-    currentWeight: string;
+    dateOfBirth: Date | null;
+    height: Measurement;
+    currentWeight: Measurement;
     location: string;
 
     // Step 3: Goal Setting
@@ -40,9 +45,9 @@ const useRegistrationStore = create<RegistrationState>((set) => ({
         boxingLevel: '',
         gender: '',
         weightClass: {},
-        age: '',
-        height: '',
-        currentWeight: '',
+        dateOfBirth: null,
+        height: { value: 0, unit: 'cm' },
+        currentWeight: { value: 0, unit: 'kg' },
         location: '',
         weightGoal: '',
         activityLevel: '',
