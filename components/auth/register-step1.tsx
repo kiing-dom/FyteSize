@@ -1,5 +1,5 @@
 import { View, Text, SafeAreaView, ScrollView } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { useRouter } from 'expo-router'
 
@@ -22,6 +22,12 @@ const Step1 = () => {
     const [boxingLevel, setBoxingLevel] = useState<BoxingLevel>(formData.boxingLevel as BoxingLevel);
     const [gender, setGender] = useState<Gender>(formData.gender as Gender | 'male');
     const [weightClass, setWeightClass] = useState(formData.weightClass);
+
+    const [isDisabled, setIsDisabled] = useState(true);
+
+    useEffect(() => {
+        setIsDisabled(!boxingLevel || !gender || !weightClass);
+    }, [boxingLevel, gender, weightClass]);
 
     const handleNext = () => {
         updateFormData({ boxingLevel, gender, weightClass });
@@ -60,48 +66,49 @@ const Step1 = () => {
 
 
     return (
-        
-                <View className='flex-1 justify-center items-center min-h-[84vh]'>
-                    <Text className='text-[20px]'>Step 1: Boxing Information</Text>
 
-                    {/** Boxing Level Picker */}
-                    <RNPickerSelect
-                        placeholder={{ label: 'Select Boxing Level', value: null }}
-                        items={boxingLevels.map(level => ({ label: level, value: level }))}
-                        onValueChange={handleBoxingLevelChange}
-                        value={boxingLevel}
-                    />
+        <View className='flex-1 justify-center items-center min-h-[84vh] w-[80%]'>
+            <Text className='text-[20px]'>Step 1: Boxing Information</Text>
 
-                    {/** Gender Picker */}
-                    <RNPickerSelect
-                        placeholder={{ label: 'Select Gender', value: null }}
-                        items={[
-                            { label: 'Male', value: 'male' },
-                            { label: 'Female', value: 'female' }
-                        ]}
-                        onValueChange={handleGenderChange}
-                        value={gender}
-                    />
+            {/** Boxing Level Picker */}
+            <RNPickerSelect
+                placeholder={{ label: 'Select Boxing Level', value: null }}
+                items={boxingLevels.map(level => ({ label: level, value: level }))}
+                onValueChange={handleBoxingLevelChange}
+                value={boxingLevel}
+            />
 
-                    {/** Weight Class Picker */}
-                    <RNPickerSelect
-                        placeholder={{ label: 'Select Weight Class', value: null }}
-                        items={weightClassOptions}
-                        onValueChange={setWeightClass}
-                        value={weightClass}
-                    />
+            {/** Gender Picker */}
+            <RNPickerSelect
+                placeholder={{ label: 'Select Gender', value: null }}
+                items={[
+                    { label: 'Male', value: 'male' },
+                    { label: 'Female', value: 'female' }
+                ]}
+                onValueChange={handleGenderChange}
+                value={gender}
+            />
 
-                    {/** Next Button */}
-                    <Button
-                        mode='contained'
-                        onPress={handleNext}
-                        buttonColor='black'
-                    >
-                        Next
-                    </Button>
+            {/** Weight Class Picker */}
+            <RNPickerSelect
+                placeholder={{ label: 'Select Weight Class', value: null }}
+                items={weightClassOptions}
+                onValueChange={setWeightClass}
+                value={weightClass}
+            />
+
+            {/** Next Button */}
+            <Button
+                mode='contained'
+                onPress={handleNext}
+                buttonColor='black'
+                disabled={isDisabled}
+            >
+                Next
+            </Button>
 
 
-                </View>
+        </View>
     )
 }
 

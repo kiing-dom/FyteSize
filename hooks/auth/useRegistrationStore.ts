@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
-interface Measurement {
-    value: number;
+export interface Measurement {
+    value: string | undefined;
     unit: string;
 }
 
@@ -46,8 +46,8 @@ const useRegistrationStore = create<RegistrationState>((set) => ({
         gender: '',
         weightClass: {},
         dateOfBirth: null,
-        height: { value: 0, unit: 'cm' },
-        currentWeight: { value: 0, unit: 'kg' },
+        height: { value: '', unit: 'cm' },
+        currentWeight: { value: '', unit: 'kg' },
         location: '',
         weightGoal: '',
         activityLevel: '',
