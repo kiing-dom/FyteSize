@@ -1,9 +1,8 @@
-import { View, Text, SafeAreaView, ScrollView } from 'react-native'
+import { View, Text } from 'react-native'
 import React, { useState } from 'react'
-import { Button, TextInput, Modal, ToggleButton } from 'react-native-paper';
-import useRegistrationStore, { Measurement } from '@/hooks/auth/useRegistrationStore';
-import { Calendar } from 'react-native-calendars';
-import { format, parseISO } from 'date-fns'
+import { Button, TextInput } from 'react-native-paper';
+import useRegistrationStore from '@/hooks/auth/useRegistrationStore';
+import { format } from 'date-fns'
 
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
 
@@ -12,12 +11,17 @@ const Step2 = () => {
     const { formData, updateFormData, setCurrentStep } = useRegistrationStore();
     const [showDatePicker, setShowDatePicker] = useState(false);
 
-    const [currentWeight, setCurrentWeight] = useState<Measurement>(formData.currentWeight);
-    const [unit, setUnit] = useState<'kg' | 'lbs'>('kg');
+    const [currentWeight, setCurrentWeight] = useState(formData.currentWeight);
 
+    const [height, setHeight] = useState(formData.height);
 
     const handlePrevious = () => {
         setCurrentStep(1);
+    }
+
+    const handleNext = () => {
+        setCurrentStep(3);
+        updateFormData({ currentWeight, height})
     }
 
     const handleDateSelect = (e: DateTimePickerEvent, selectedDate: Date | undefined) => {
@@ -26,23 +30,13 @@ const Step2 = () => {
         updateFormData({ dateOfBirth: currentDate})
     }
 
-    const handleCurrentWeightChange = (value: string ) => {
-        setCurrentWeight({ ...currentWeight, value });
-    }
-
-    const convertWeight = (value: string, fromUnit: string, toUnit: string) => {
-        if(fromUnit === toUnit) return value;
-        if(fromUnit === 'kg' && toUnit === 'lbs') return (Number(value) * 2.20462).toFixed(2).toString();
-        if(fromUnit === 'lbs' && toUnit === 'kg') return (Number(value) / 2.20462).toFixed(2).toString();
+    const handleCurrentWeightChange = (value: string) => {
+        setCurrentWeight(value);
     }
     
-    const handleWeightUnitToggle = (value: string) => {
-        if(value === 'kg' || value === 'lbs'){
-            const weightValue = currentWeight.value ?? '0'
-            setUnit(value);
-            const convertedWeight = convertWeight(weightValue, unit, value)
-            setCurrentWeight({ value: convertedWeight, unit: value })};
-    };
+    const handleHeightChange = (value: string) => {
+        setHeight(value);
+    }
 
     return (
         <View className='flex-1 justify-center items-center min-h-[84vh] w-[80%]'>
@@ -59,22 +53,33 @@ const Step2 = () => {
                 {formData.dateOfBirth ? format(formData.dateOfBirth, 'dd/MM/yyyy') : 'Select Date of Birth'}
             </Button>
 
-            <Text className='text-gray-500'>Current Weight</Text>
-            <View className='flex-row items-center mt-5'>
+            <View className='flex-row items-center mt-2'>
             <TextInput 
+                label="Current Weight (kg)"
                 mode='outlined'
                 activeOutlineColor='black'
-                className='h-12 mr-4 mb-4 w-[70%]'
+                className='h-12 mr-4 mb-4 w-[90%]'
                 keyboardType='numeric'
-                value={currentWeight.value}
+                value={currentWeight}
                 onChangeText={handleCurrentWeightChange}
             />
-            <ToggleButton.Row style={{ height: 56}} onValueChange={handleWeightUnitToggle} value={unit}>
-                <ToggleButton icon="weight-kilogram" value='kg' />
-                <ToggleButton icon="weight-pound" value='lbs' />
-            </ToggleButton.Row>
 
             </View>
+
+            {/* Current Height Input */}
+            <View className='flex-row items-center mt-2'>
+            <TextInput
+                label="Height (cm)"
+                mode='outlined'
+                activeOutlineColor='black'
+                className='h-12 mr-4 mb-4 w-[90%]'
+                keyboardType='numeric'
+                value={height}
+                onChangeText={handleHeightChange}
+            />
+            </View>
+
+            <View className='flex-row '>
 
             <Button
                 mode='contained'
@@ -83,6 +88,17 @@ const Step2 = () => {
             >
                 Previous
             </Button>
+
+            <Button
+                mode='contained'
+                buttonColor='black'
+                onPress={handleNext}
+            >
+                Next
+            </Button>
+
+            </View>
+            
 
             {/** Modal for Date of Birth */}
             {showDatePicker && (

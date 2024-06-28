@@ -1,7 +1,6 @@
-import { View, Text, SafeAreaView, ScrollView } from 'react-native'
+import { View, Text } from 'react-native'
 import React, { useEffect, useState } from 'react'
 
-import { useRouter } from 'expo-router'
 
 import useRegistrationStore from '@/hooks/auth/useRegistrationStore';
 
@@ -50,12 +49,7 @@ const Step1 = () => {
 
 
     /* Creating Options to use in the Pickers */
-    const boxingLevelOptions = boxingLevels.map(level => ({ label: level, value: level }));
 
-    const genderOptions = [
-        { label: 'Male', value: 'male' },
-        { label: 'Female', value: 'female' }
-    ];
 
     /** Get Weight Class Options based on boxing level and gender */
     const availableWeightClasses = weightClasses[gender]?.[boxingLevel] || [];
@@ -93,7 +87,7 @@ const Step1 = () => {
             <RNPickerSelect
                 placeholder={{ label: 'Select Weight Class', value: null }}
                 items={weightClassOptions}
-                onValueChange={setWeightClass}
+                onValueChange={weightClassChange}
                 value={weightClass}
             />
 

@@ -25,7 +25,7 @@ const RegisterScreen = () => {
   return (
     <SafeAreaView className="h-full bg-white">
       <View className="w-full p-4">
-        <ProgressBar progress={progress} className="mt-10 h-4 bg-neutral-300 rounded-md" color="blue" />
+        <ProgressBar progress={progress} className="mt-10 h-4 bg-neutral-300 rounded-md" color="black" />
       </View>
       <ScrollView className=''>
         <View className="flex justify-center items-center min-h-[84vh]">
