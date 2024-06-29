@@ -4,6 +4,7 @@ import { ProgressBar } from 'react-native-paper';
 import useRegistrationStore from '@/hooks/auth/useRegistrationStore';
 import Step1 from '@/components/auth/register-step1';
 import Step2 from '@/components/auth/register-step2';
+import Step3 from '@/components/auth/register-step3';
 
 const RegisterScreen = () => {
   const { currentStep } = useRegistrationStore();
@@ -17,6 +18,8 @@ const RegisterScreen = () => {
         return <Step1 />;
       case 2:
         return <Step2 />;
+      case 3:
+        return <Step3 />
       default:
         return <Step1 />;
     }

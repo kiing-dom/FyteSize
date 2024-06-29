@@ -1,10 +1,18 @@
 import { View, Text } from 'react-native'
-import React, { useState } from 'react'
-import { Button, TextInput } from 'react-native-paper';
-import useRegistrationStore from '@/hooks/auth/useRegistrationStore';
-import { format } from 'date-fns'
+import React, { useEffect, useState } from 'react'
 
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
+import useRegistrationStore from '@/hooks/auth/useRegistrationStore';
+
+import { Button, TextInput } from 'react-native-paper';
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import RNPickerSelect from 'react-native-picker-select';
+
+import { format } from 'date-fns';
+import axios from 'axios'
+
+const apiKey = process.env.EXPO_PUBLIC_COUNTRY_API_KEY;
+const apiUrl = process.env.EXPO_PUBLIC_COUNTRY_URL;
+
 
 const Step2 = () => {
     /**  Include State Management Here */
@@ -15,35 +23,78 @@ const Step2 = () => {
 
     const [height, setHeight] = useState(formData.height);
 
+    const [location, setLocation] = useState(formData.location);
+    
+    const [isDisabled, setIsDisabled] = useState(true);
+
     const handlePrevious = () => {
         setCurrentStep(1);
     }
 
     const handleNext = () => {
         setCurrentStep(3);
-        updateFormData({ currentWeight, height})
+        updateFormData({ currentWeight, height })
     }
 
     const handleDateSelect = (e: DateTimePickerEvent, selectedDate: Date | undefined) => {
         const currentDate = selectedDate || formData.dateOfBirth;
         setShowDatePicker(false);
-        updateFormData({ dateOfBirth: currentDate})
+        updateFormData({ dateOfBirth: currentDate })
     }
 
     const handleCurrentWeightChange = (value: string) => {
         setCurrentWeight(value);
     }
-    
+
     const handleHeightChange = (value: string) => {
         setHeight(value);
     }
+
+    const handleLocationSelection = (value: string) => {
+        setLocation(value);
+    }
+
+    useEffect(() => {
+        setIsDisabled(!formData.dateOfBirth || !currentWeight || !height || !location)
+    })
+
+    const [countryData, setCountryData] = useState<{ value: any; label: any; }[]>([]);;
+    useEffect(() => {
+        const config = {
+            method: 'get',
+            url: apiUrl,
+            headers: {
+                'X-CSCAPI-KEY': apiKey
+            }
+        };
+
+        axios(config)
+            .then(function (response) {
+                console.log(JSON.stringify(response.data));
+                let count = Object.keys(response.data).length;
+                let countryArray: { value: any; label: any; }[] = [];
+                for (let idx = 0; idx < count; idx++) {
+                    countryArray.push({
+                        value: response.data[idx].iso2,
+                        label: response.data[idx].name,
+                    });
+                }
+                setCountryData(countryArray);
+            })
+            .catch(function (error: string) {
+                console.log(error)
+            });
+    }, []);
+
 
     return (
         <View className='flex-1 justify-center items-center min-h-[84vh] w-[80%]'>
             <Text className='text-[20px]'>
                 Step 2: Personal Information
             </Text>
-            <Text className='text-gray-500'>Date of Birth</Text>
+
+            {/* Date of Birth Input */}
+            <Text className='text-neutral-500'>Date of Birth</Text>
             <Button
                 textColor='black'
                 mode='outlined'
@@ -53,52 +104,67 @@ const Step2 = () => {
                 {formData.dateOfBirth ? format(formData.dateOfBirth, 'dd/MM/yyyy') : 'Select Date of Birth'}
             </Button>
 
+            {/* Current Weight Input */}
+            <Text className='text-neutral-500'>Weight</Text>
             <View className='flex-row items-center mt-2'>
-            <TextInput 
-                label="Current Weight (kg)"
-                mode='outlined'
-                activeOutlineColor='black'
-                className='h-12 mr-4 mb-4 w-[90%]'
-                keyboardType='numeric'
-                value={currentWeight}
-                onChangeText={handleCurrentWeightChange}
-            />
-
+                <TextInput
+                    label="Current Weight (kg)"
+                    mode='outlined'
+                    activeOutlineColor='black'
+                    className='h-12 mr-4 mb-4 w-[90%]'
+                    keyboardType='numeric'
+                    value={currentWeight}
+                    onChangeText={handleCurrentWeightChange}
+                />
             </View>
 
-            {/* Current Height Input */}
+            {/* Height Input */}
+            <Text className='text-neutral-500'>Height</Text>
             <View className='flex-row items-center mt-2'>
-            <TextInput
-                label="Height (cm)"
-                mode='outlined'
-                activeOutlineColor='black'
-                className='h-12 mr-4 mb-4 w-[90%]'
-                keyboardType='numeric'
-                value={height}
-                onChangeText={handleHeightChange}
-            />
+                <TextInput
+                    label="Height (cm)"
+                    mode='outlined'
+                    activeOutlineColor='black'
+                    className='h-12 mr-4 mb-4 w-[90%]'
+                    keyboardType='numeric'
+                    value={height}
+                    onChangeText={handleHeightChange}
+                />
+            </View>
+            {/* Location Input */}
+            <Text className='text-neutral-500'>Location</Text>
+            <View className='mt-2 w-full'>
+                <RNPickerSelect
+                    style={{ placeholder: {
+                        color: "gray"
+                    }}}
+                    placeholder={{ label: "Select your Location...", value: null}}
+                    items={countryData}
+                    onValueChange={handleLocationSelection}
+                    value={location}
+                />
             </View>
 
+            {/** Previous and Next Buttons */}
             <View className='flex-row '>
+                <Button
+                    mode='contained'
+                    buttonColor='gray'
+                    onPress={handlePrevious}
+                >
+                    Previous
+                </Button>
 
-            <Button
-                mode='contained'
-                buttonColor='gray'
-                onPress={handlePrevious}
-            >
-                Previous
-            </Button>
-
-            <Button
-                mode='contained'
-                buttonColor='black'
-                onPress={handleNext}
-            >
-                Next
-            </Button>
-
+                <Button
+                    mode='contained'
+                    buttonColor='black'
+                    onPress={handleNext}
+                    disabled={isDisabled}
+                >
+                    Next
+                </Button>
             </View>
-            
+
 
             {/** Modal for Date of Birth */}
             {showDatePicker && (
@@ -107,13 +173,10 @@ const Step2 = () => {
                     mode="date"
                     display="default"
                     onChange={handleDateSelect}
-                    
+
                 />
             )}
         </View>
-
-
-
     )
 };
 
