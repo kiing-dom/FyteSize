@@ -33,7 +33,7 @@ const Step2 = () => {
 
     const handleNext = () => {
         setCurrentStep(3);
-        updateFormData({ currentWeight, height })
+        updateFormData({ currentWeight, height, location })
     }
 
     const handleDateSelect = (e: DateTimePickerEvent, selectedDate: Date | undefined) => {
