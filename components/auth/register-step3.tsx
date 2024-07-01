@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native'
-import React from 'react';
+import React, { useState } from 'react';
 import useRegistrationStore from '@/hooks/auth/useRegistrationStore';
 import { Button } from 'react-native-paper';
 import { ButtonGroup } from '@rneui/themed';
@@ -24,6 +24,22 @@ const Step3 = () => {
 
     const { formData, updateFormData, setCurrentStep } = useRegistrationStore();
 
+    const [weightGoal, setWeightGoal] = useState(formData.weightGoal);
+    const [isWeightGoalSelected, setIsWeightGoalSelected] = useState(false);
+
+    const [activityLevel, setActivityLevel] = useState(formData.activityLevel);
+    const [isActivityLevelSelected, setIsActivityLevelSelected] = useState(false);
+
+    const handleWeightGoalSelection = (idx: number) => {
+        setWeightGoal(weightGoals[idx].label);
+        setIsWeightGoalSelected(idx !== null);
+    }
+
+    const handleActivityLevelSelection = (idx: number) => {
+        setActivityLevel(activityLevels[idx].label);
+        setIsActivityLevelSelected(idx !== null);
+    }
+
 
     const handlePrevious = () => {
         setCurrentStep(1);
@@ -45,6 +61,8 @@ const Step3 = () => {
                 <ButtonGroup
                     containerStyle={{ borderRadius: 16, borderColor: "black"}}
                     buttons={weightGoals.map((goals) => goals.label)}
+                    selectedIndex ={weightGoals.findIndex((goal) => goal.label === weightGoal)}
+                    onPress={handleWeightGoalSelection}
                     vertical
                 />
             </View>
@@ -54,7 +72,9 @@ const Step3 = () => {
                 <ButtonGroup
                     containerStyle={{ borderRadius: 16, borderColor: "black" }}
                     textStyle={{textAlign: 'center'}}
-                    buttons={activityLevels.map((activityLevel) => activityLevel.label)}
+                    buttons={activityLevels.map((level) => level.label)}
+                    selectedIndex={activityLevels.findIndex((level) =>  level.label ===  activityLevel)}
+                    onPress={handleActivityLevelSelection}
                     vertical
                 />
             </View>
