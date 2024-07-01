@@ -43,6 +43,7 @@ const Step3 = () => {
             <View className='w-[90%]'>
                 <Text>Weight Goals</Text>
                 <ButtonGroup
+                    containerStyle={{ borderRadius: 16, borderColor: "black"}}
                     buttons={weightGoals.map((goals) => goals.label)}
                     vertical
                 />
@@ -51,6 +52,7 @@ const Step3 = () => {
             <View className='w-[90%]'>
                 <Text>Activity Level</Text>
                 <ButtonGroup
+                    containerStyle={{ borderRadius: 16, borderColor: "black" }}
                     textStyle={{textAlign: 'center'}}
                     buttons={activityLevels.map((activityLevel) => activityLevel.label)}
                     vertical
