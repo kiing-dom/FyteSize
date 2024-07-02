@@ -5,11 +5,12 @@ import useRegistrationStore from '@/hooks/auth/useRegistrationStore';
 import Step1 from '@/components/auth/register-step1';
 import Step2 from '@/components/auth/register-step2';
 import Step3 from '@/components/auth/register-step3';
+import Step4 from '@/components/auth/register-step4';
 
 const RegisterScreen = () => {
   const { currentStep } = useRegistrationStore();
 
-  const totalSteps = 2;
+  const totalSteps = 4;
   const progress = currentStep / totalSteps;
 
   const renderStep = () => {
@@ -20,6 +21,8 @@ const RegisterScreen = () => {
         return <Step2 />;
       case 3:
         return <Step3 />
+      case 4:
+        return <Step4 />
       default:
         return <Step1 />;
     }

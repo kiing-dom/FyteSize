@@ -8,6 +8,7 @@ interface FormData {
 
     // Step 2: Personal Information
     dateOfBirth: Date | null;
+    age: number;
     height: string;
     currentWeight: string;
     location: string;
@@ -41,6 +42,7 @@ const useRegistrationStore = create<RegistrationState>((set) => ({
         gender: '',
         weightClass: {},
         dateOfBirth: null,
+        age: 0,
         height: "",
         currentWeight: "",
         location: '',

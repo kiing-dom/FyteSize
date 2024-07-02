@@ -7,7 +7,7 @@ import { Button, TextInput } from 'react-native-paper';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import RNPickerSelect from 'react-native-picker-select';
 
-import { format } from 'date-fns';
+import { format, differenceInYears } from 'date-fns';
 import axios from 'axios'
 
 const apiKey = process.env.EXPO_PUBLIC_COUNTRY_API_KEY;
@@ -18,6 +18,7 @@ const Step2 = () => {
     /**  Include State Management Here */
     const { formData, updateFormData, setCurrentStep } = useRegistrationStore();
     const [showDatePicker, setShowDatePicker] = useState(false);
+    const [age, setAge] = useState(formData.age);
 
     const [currentWeight, setCurrentWeight] = useState(formData.currentWeight);
 
@@ -33,13 +34,18 @@ const Step2 = () => {
 
     const handleNext = () => {
         setCurrentStep(3);
-        updateFormData({ currentWeight, height, location })
+        updateFormData({ currentWeight, height, location, age })
     }
 
     const handleDateSelect = (e: DateTimePickerEvent, selectedDate: Date | undefined) => {
         const currentDate = selectedDate || formData.dateOfBirth;
         setShowDatePicker(false);
-        updateFormData({ dateOfBirth: currentDate })
+        updateFormData({ dateOfBirth: currentDate });
+
+        if(currentDate) {
+           const calculatedAge = differenceInYears(new Date(), new Date(currentDate));
+           setAge(calculatedAge); 
+        }
     }
 
     const handleCurrentWeightChange = (value: string) => {
@@ -55,8 +61,14 @@ const Step2 = () => {
     }
 
     useEffect(() => {
-        setIsDisabled(!formData.dateOfBirth || !currentWeight || !height || !location)
-    })
+        setIsDisabled(!formData.dateOfBirth || !currentWeight || !height || !location);
+
+        //dynamically update age on component mount or when age changes
+        if(formData.dateOfBirth) {
+            const calculatedAge = differenceInYears(new Date(), new Date(formData.dateOfBirth));
+            setAge(calculatedAge);
+        }
+    },  [currentWeight, height, location]);
 
     const [countryData, setCountryData] = useState<{ value: any; label: any; }[]>([]);;
     useEffect(() => {
@@ -95,6 +107,7 @@ const Step2 = () => {
 
             {/* Date of Birth Input */}
             <Text className='text-neutral-500'>Date of Birth</Text>
+            <Text className='font-bold'>Age: {age} </Text>
             <Button
                 textColor='black'
                 mode='outlined'
@@ -103,6 +116,7 @@ const Step2 = () => {
             >
                 {formData.dateOfBirth ? format(formData.dateOfBirth, 'dd/MM/yyyy') : 'Select Date of Birth'}
             </Button>
+            
 
             {/* Current Weight Input */}
             <Text className='text-neutral-500'>Weight</Text>
