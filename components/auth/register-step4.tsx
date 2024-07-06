@@ -17,10 +17,21 @@ const handlePrevious = () => {
 
   return (
     <View className='flex-1 justify-center items-center min-h-[84vh] w-[80%]'>
-        <Text className='text-[24px]'>Step 4: Calorie Goal</Text>
-        <Text className='text-[20px]'>
-            {formData.tdee}
+        <Text className='text-[24px]'>Congratulations!</Text>
+        <Text className='text-neutral-500 text-center mb-4'> Based on the information you provided,{"\n"}
+            we were able to calculate your calorie goal
         </Text>
+        <Text className='text-[24px]'>
+            Your Daily Calorie Goal is:
+        </Text>
+        <Text className='text-center text-[32px] font-extrabold mb-8'>
+            {formData.tdee} 
+            {"\n"}
+            <Text className='text-[20px] font-light text-neutral-500'>kcal</Text>
+        </Text>
+
+        <Text className='text-neutral-500 text-center mb-2'>If you're not happy with the results, feel free to return to the previous steps to make adjustments</Text>
+        <Text className='text-neutral-600 text-center'> Otherwise press <Text className='font-semibold'>next</Text> to proceed to the final step</Text>
 
         <View className='flex-row mt-8'>
                 <Button

@@ -1,9 +1,8 @@
-import { View, Text } from 'react-native'
+import { View, Text } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import useRegistrationStore from '@/hooks/auth/useRegistrationStore';
 import { Button } from 'react-native-paper';
 import { ButtonGroup } from '@rneui/themed';
-
 
 const weightGoals = [
     { label: "Lose Weight", value: -500 },
@@ -19,13 +18,11 @@ const activityLevels = [
     { label: "Extremely Active (2x Daily Exercise/Physical Job)", value: "Extremely Active" }
 ];
 
-
 const Step3 = () => {
-
     const { formData, updateFormData, setCurrentStep } = useRegistrationStore();
 
     const [bmr, setBmr] = useState(formData.bmr || 0);
-    const [tdee, setTdee] = useState(formData.tdee) || 0;
+    const [tdee, setTdee] = useState(formData.tdee || 0);
 
     const [weightGoal, setWeightGoal] = useState(formData.weightGoal);
     const [isWeightGoalSelected, setIsWeightGoalSelected] = useState(false);
@@ -34,58 +31,48 @@ const Step3 = () => {
     const [isActivityLevelSelected, setIsActivityLevelSelected] = useState(false);
 
     const handleWeightGoalSelection = (idx: number) => {
-        setWeightGoal(weightGoals[idx]?.label);
+        const selectedGoal = weightGoals[idx]?.label;
+        setWeightGoal(selectedGoal);
         setIsWeightGoalSelected(idx !== -1);
-    }
+        updateFormData({ weightGoal: selectedGoal });
+    };
 
     const handleActivityLevelSelection = (idx: number) => {
-        setActivityLevel(activityLevels[idx]?.value);
+        const selectedLevel = activityLevels[idx]?.value;
+        setActivityLevel(selectedLevel);
         setIsActivityLevelSelected(idx !== -1);
-    }
-
+        updateFormData({ activityLevel: selectedLevel });
+    };
 
     const handlePrevious = () => {
         setCurrentStep(2);
-    }
+    };
 
     const handleNext = () => {
-        updateFormData({ weightGoal, activityLevel, bmr, tdee})
+        updateFormData({ weightGoal, activityLevel, bmr, tdee });
         setCurrentStep(4);
-        console.log(formData)
-    }
-    
+        console.log(formData);
+    };
+
     useEffect(() => {
-        if (formData.activityLevel && formData.weightGoal) {
+        if (activityLevel && weightGoal) {
             calculateBMR();
         }
-    }, [formData.activityLevel, formData.weightGoal]);
-    
+    }, [activityLevel, weightGoal]);
+
     useEffect(() => {
-        if (bmr && formData.activityLevel && formData.weightGoal) {
+        if (bmr && activityLevel && weightGoal) {
             calculateTdee();
         }
-    }, [bmr, formData.activityLevel, formData.weightGoal]);
-    /**
- * Calculates the Basal Metabolic Rate (BMR) based on the user's profile data.
- * Uses the Mifflin-St Jeor Equation for Resting Metabolic Rate.
- * 
- * BMR formula for men:
- * BMR = 10 * weight (kg) + 6.25 * height (cm) - 5 * age (years) + 5
- * 
- * BMR formula for women:
- * BMR = 10 * weight (kg) + 6.25 * height (cm) - 5 * age (years) - 161
- * 
- * @function calculateBMR
- * @return {void}
- */
-    const calculateBMR = (): void => {
+    }, [bmr, activityLevel, weightGoal]);
+
+    const calculateBMR = () => {
         if (formData.gender === "male") {
             setBmr(Math.floor(10 * parseInt(formData.currentWeight) + 6.25 * parseInt(formData.height) - 5 * formData.age + 5));
         } else {
             setBmr(Math.floor(10 * parseInt(formData.currentWeight) + 6.25 * parseInt(formData.height) - 5 * formData.age - 161));
         }
-    }
-
+    };
 
     const calculateTdee = () => {
         const activityMultipliers: Record<string, number> = {
@@ -99,17 +86,11 @@ const Step3 = () => {
         const goalMultiplier = weightGoals.find((goal) => goal.label === weightGoal)?.value ?? 0;
 
         setTdee(Math.floor(bmr * activityMultipliers[activityLevel] + goalMultiplier));
-    }
-
-
-
+    };
 
     return (
         <View className='flex-1 justify-center items-center min-h-[84vh] w-[80%]'>
-            <Text className='text-[20px] mb-4'>
-                Step 3: Goals
-            </Text>
-
+            <Text className='text-[20px] mb-4'>Step 3: Goals</Text>
 
             <View className='w-full'>
                 <Text>Weight Goals</Text>
@@ -137,26 +118,11 @@ const Step3 = () => {
             </View>
 
             <View className='flex-row mt-8'>
-                <Button
-                    mode='contained'
-                    buttonColor='gray'
-                    onPress={handlePrevious}
-                >
-                    Previous
-                </Button>
-
-                <Button
-                    mode='contained'
-                    buttonColor='black'
-                    onPress={handleNext}
-                >
-                    Next
-                </Button>
+                <Button mode='contained' buttonColor='gray' onPress={handlePrevious}>Previous</Button>
+                <Button mode='contained' buttonColor='black' onPress={handleNext}>Next</Button>
             </View>
-
-
         </View>
-    )
+    );
 };
 
 export default Step3;
