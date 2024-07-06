@@ -101,6 +101,7 @@ const Step3 = () => {
                     selectedIndex={weightGoals.findIndex((goal) => goal.label === weightGoal)}
                     onPress={handleWeightGoalSelection}
                     vertical
+                    selectedButtonStyle={{backgroundColor: "black"}}
                 />
             </View>
 
@@ -114,6 +115,7 @@ const Step3 = () => {
                     selectedIndex={activityLevels.findIndex((level) => level.value === activityLevel)}
                     onPress={handleActivityLevelSelection}
                     vertical
+                    selectedButtonStyle={{backgroundColor: "black"}}
                 />
             </View>
 
