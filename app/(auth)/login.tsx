@@ -1,4 +1,5 @@
-import { Link } from 'expo-router';
+import useRegistrationStore from '@/hooks/auth/useRegistrationStore';
+import { Link, router } from 'expo-router';
 import React from 'react';
 
 import { View, Text, SafeAreaView, ScrollView, Image } from 'react-native'
@@ -8,6 +9,12 @@ import { TextInput, Button } from 'react-native-paper';
 const LoginScreen = () => {
 
   /**  Include State Management Here */
+  const { setCurrentStep } = useRegistrationStore();
+
+  const handleRegisterPress = () => {
+    setCurrentStep(1);
+    router.push('/register')
+  };
 
   return (
     <SafeAreaView className='h-full bg-white'>
@@ -42,7 +49,7 @@ const LoginScreen = () => {
             Login
           </Button>
           <Text className='text-[16px]'>
-            Dont have an account? <Link href="/register" className='text-blue-500 font-bold'>Register</Link>
+            Dont have an account? <Text onPress={handleRegisterPress} className='text-blue-500 font-bold'>Register</Text>
           </Text>
 
         </View>
