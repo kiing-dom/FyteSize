@@ -15,6 +15,10 @@ const handlePrevious = () => {
     setCurrentStep(3);
 }
 
+const handleNext = () => {
+    setCurrentStep(5);
+}
+
   return (
     <View className='flex-1 justify-center items-center min-h-[84vh] w-[80%]'>
         <Text className='text-[24px]'>Congratulations!</Text>
@@ -31,7 +35,7 @@ const handlePrevious = () => {
         </Text>
 
         <Text className='text-neutral-500 text-center mb-2'>If you're not happy with the results, feel free to return to the previous steps to make adjustments</Text>
-        <Text className='text-neutral-600 text-center'> Otherwise press <Text className='font-semibold'>next</Text> to proceed to the final step</Text>
+        <Text className='text-neutral-600 text-center'> Otherwise press <Text className='font-semibold'>'Next'</Text> to proceed to the final step</Text>
 
         <View className='flex-row mt-8'>
                 <Button
@@ -40,6 +44,16 @@ const handlePrevious = () => {
                     onPress={handlePrevious}
                 >
                     Previous
+                </Button>
+        </View>
+
+        <View className='flex-row mt-8'>
+                <Button
+                    mode='contained'
+                    buttonColor='black'
+                    onPress={handleNext}
+                >
+                    Next
                 </Button>
         </View>
         
