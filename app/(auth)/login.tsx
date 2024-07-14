@@ -1,5 +1,5 @@
 import useRegistrationStore from '@/hooks/auth/useRegistrationStore';
-import { Link, router } from 'expo-router';
+import { router } from 'expo-router';
 import React from 'react';
 
 import { View, Text, SafeAreaView, ScrollView, Image } from 'react-native'
@@ -28,7 +28,7 @@ const LoginScreen = () => {
           <TextInput
             className='w-[80%] -mt-8 mb-2'
             mode='outlined'
-            label="Email/Username"
+            label="Email"
             value={""}
             activeOutlineColor='black'
             keyboardType='email-address'
