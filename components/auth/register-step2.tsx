@@ -21,11 +21,13 @@ const Step2 = () => {
     const [age, setAge] = useState(formData.age);
 
     const [currentWeight, setCurrentWeight] = useState(formData.currentWeight);
+    const [isWeightValid, setIsWeightValid] = useState(false);
 
     const [height, setHeight] = useState(formData.height);
+    const [isHeightValid, setIsHeightValid] = useState(false);
 
     const [location, setLocation] = useState(formData.location);
-    
+
     const [isDisabled, setIsDisabled] = useState(true);
 
     const handlePrevious = () => {
@@ -42,18 +44,29 @@ const Step2 = () => {
         setShowDatePicker(false);
         updateFormData({ dateOfBirth: currentDate });
 
-        if(currentDate) {
-           const calculatedAge = differenceInYears(new Date(), new Date(currentDate));
-           setAge(calculatedAge); 
+        if (currentDate) {
+            const calculatedAge = differenceInYears(new Date(), new Date(currentDate));
+            setAge(calculatedAge);
         }
     }
 
     const handleCurrentWeightChange = (value: string) => {
         setCurrentWeight(value);
+
+        // Validate the weight
+        const numericValue = parseFloat(value);
+        const isValid = value === '' && !isNaN(numericValue) && numericValue >= 14 && numericValue <= 453;
+
+        setIsWeightValid(isValid);
     }
 
     const handleHeightChange = (value: string) => {
         setHeight(value);
+
+        const numericValue = parseFloat(value);
+        const isValid = value === '' && !isNaN(numericValue) && numericValue >= 60 && numericValue <= 277;
+
+        setIsHeightValid(isValid);
     }
 
     const handleLocationSelection = (value: string) => {
@@ -62,13 +75,12 @@ const Step2 = () => {
 
     useEffect(() => {
         setIsDisabled(!formData.dateOfBirth || !currentWeight || !height || !location);
-
         //dynamically update age on component mount or when age changes
-        if(formData.dateOfBirth) {
+        if (formData.dateOfBirth) {
             const calculatedAge = differenceInYears(new Date(), new Date(formData.dateOfBirth));
             setAge(calculatedAge);
         }
-    },  [currentWeight, height, location]);
+    }, [currentWeight, height, location]);
 
     const [countryData, setCountryData] = useState<{ value: any; label: any; }[]>([]);;
     useEffect(() => {
@@ -116,11 +128,11 @@ const Step2 = () => {
             >
                 {formData.dateOfBirth ? format(formData.dateOfBirth, 'dd/MM/yyyy') : 'Select Date of Birth'}
             </Button>
-            
+
 
             {/* Current Weight Input */}
             <Text className='text-neutral-500'>Weight</Text>
-            <View className='flex-row items-center mt-2'>
+            <View className='flex-row items-end mt-2'>
                 <TextInput
                     label="Current Weight (kg)"
                     mode='outlined'
@@ -129,8 +141,13 @@ const Step2 = () => {
                     keyboardType='numeric'
                     value={currentWeight}
                     onChangeText={handleCurrentWeightChange}
+                    error={!isWeightValid}
                 />
             </View>
+
+            {!isWeightValid && (
+                <Text className='flex self-start -mt-2 text-red-500'> Invalid Weight </Text>
+            )}
 
             {/* Height Input */}
             <Text className='text-neutral-500'>Height</Text>
@@ -143,16 +160,26 @@ const Step2 = () => {
                     keyboardType='numeric'
                     value={height}
                     onChangeText={handleHeightChange}
+                    error={!isHeightValid}
                 />
             </View>
+             
+            {!isHeightValid && (
+                <Text className='flex self-start -mt-2 text-red-500'> Invalid Height </Text>
+            )}
+
+
+
             {/* Location Input */}
             <Text className='text-neutral-500'>Location</Text>
             <View className='mt-2 w-full'>
                 <RNPickerSelect
-                    style={{ placeholder: {
-                        color: "gray"
-                    }}}
-                    placeholder={{ label: "Select your Location...", value: null}}
+                    style={{
+                        placeholder: {
+                            color: "gray"
+                        }
+                    }}
+                    placeholder={{ label: "Select your Location...", value: null }}
                     items={countryData}
                     onValueChange={handleLocationSelection}
                     value={location}
