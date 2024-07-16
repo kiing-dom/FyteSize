@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState} from 'react'
 
 import useRegistrationStore from '@/hooks/auth/useRegistrationStore';
 
@@ -21,10 +21,10 @@ const Step2 = () => {
     const [age, setAge] = useState(formData.age);
 
     const [currentWeight, setCurrentWeight] = useState(formData.currentWeight);
-    const [isWeightValid, setIsWeightValid] = useState(false);
+    const [isWeightValid, setIsWeightValid] = useState(true);
 
     const [height, setHeight] = useState(formData.height);
-    const [isHeightValid, setIsHeightValid] = useState(false);
+    const [isHeightValid, setIsHeightValid] = useState(true);
 
     const [location, setLocation] = useState(formData.location);
 
@@ -55,19 +55,19 @@ const Step2 = () => {
 
         // Validate the weight
         const numericValue = parseFloat(value);
-        const isValid = value === '' && !isNaN(numericValue) && numericValue >= 14 && numericValue <= 453;
+        const isValid = value.trim() === '' || (!isNaN(numericValue) && numericValue >= 14 && numericValue <= 453);
 
         setIsWeightValid(isValid);
     }
 
     const handleHeightChange = (value: string) => {
         setHeight(value);
-
+    
         const numericValue = parseFloat(value);
-        const isValid = value === '' && !isNaN(numericValue) && numericValue >= 60 && numericValue <= 277;
-
+        const isValid = value.trim() === '' || (!isNaN(numericValue) && numericValue >= 60 && numericValue <= 277);
+    
         setIsHeightValid(isValid);
-    }
+    };
 
     const handleLocationSelection = (value: string) => {
         setLocation(value);
@@ -94,7 +94,7 @@ const Step2 = () => {
 
         axios(config)
             .then(function (response) {
-                console.log(JSON.stringify(response.data));
+                // console.log(JSON.stringify(response.data));
                 let count = Object.keys(response.data).length;
                 let countryArray: { value: any; label: any; }[] = [];
                 for (let idx = 0; idx < count; idx++) {
