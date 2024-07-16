@@ -55,7 +55,7 @@ const Step2 = () => {
 
         // Validate the weight
         const numericValue = parseFloat(value);
-        const isValid = value.trim() === '' || (!isNaN(numericValue) && numericValue >= 14 && numericValue <= 453);
+        const isValid = value.trim() !== '' && (!isNaN(numericValue) && numericValue >= 14 && numericValue <= 453);
 
         setIsWeightValid(isValid);
     }
@@ -64,13 +64,17 @@ const Step2 = () => {
         setHeight(value);
     
         const numericValue = parseFloat(value);
-        const isValid = value.trim() === '' || (!isNaN(numericValue) && numericValue >= 60 && numericValue <= 277);
+        const isValid = value.trim() !== '' && (!isNaN(numericValue) && numericValue >= 60 && numericValue <= 277);
     
         setIsHeightValid(isValid);
     };
 
     const handleLocationSelection = (value: string) => {
         setLocation(value);
+    }
+
+    const handleAgeChange = (value : Date) => {
+
     }
 
     useEffect(() => {
