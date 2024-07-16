@@ -18,7 +18,9 @@ const Step2 = () => {
     /**  Include State Management Here */
     const { formData, updateFormData, setCurrentStep } = useRegistrationStore();
     const [showDatePicker, setShowDatePicker] = useState(false);
+
     const [age, setAge] = useState(formData.age);
+    const [isAgeValid, setIsAgeValid] = useState(true);
 
     const [currentWeight, setCurrentWeight] = useState(formData.currentWeight);
     const [isWeightValid, setIsWeightValid] = useState(true);
@@ -47,6 +49,7 @@ const Step2 = () => {
         if (currentDate) {
             const calculatedAge = differenceInYears(new Date(), new Date(currentDate));
             setAge(calculatedAge);
+            setIsAgeValid(calculatedAge >= 16);
         }
     }
 
@@ -73,12 +76,12 @@ const Step2 = () => {
         setLocation(value);
     }
 
-    const handleAgeChange = (value : Date) => {
+    const handleDateOfBirthChange = (value : Date) => {
 
     }
 
     useEffect(() => {
-        setIsDisabled(!formData.dateOfBirth || !currentWeight || !height || !location);
+        setIsDisabled(!formData.dateOfBirth || !isWeightValid || !isHeightValid || !location);
         //dynamically update age on component mount or when age changes
         if (formData.dateOfBirth) {
             const calculatedAge = differenceInYears(new Date(), new Date(formData.dateOfBirth));
@@ -133,6 +136,10 @@ const Step2 = () => {
                 {formData.dateOfBirth ? format(formData.dateOfBirth, 'dd/MM/yyyy') : 'Select Date of Birth'}
             </Button>
 
+            {!isAgeValid && (
+                <Text className='flex self-start -mt-2 text-red-500'> <Text className='font-bold'>Invalid Age:</Text> You must be at least 16 years old </Text>
+            )}
+
 
             {/* Current Weight Input */}
             <Text className='text-neutral-500'>Weight</Text>
@@ -150,7 +157,7 @@ const Step2 = () => {
             </View>
 
             {!isWeightValid && (
-                <Text className='flex self-start -mt-2 text-red-500'> Invalid Weight </Text>
+                <Text className='flex self-start -mt-2 text-red-500 font-bold'> Invalid Weight </Text>
             )}
 
             {/* Height Input */}
@@ -169,7 +176,7 @@ const Step2 = () => {
             </View>
              
             {!isHeightValid && (
-                <Text className='flex self-start -mt-2 text-red-500'> Invalid Height </Text>
+                <Text className='flex self-start -mt-2 text-red-500 font-bold'> Invalid Height </Text>
             )}
 
 
