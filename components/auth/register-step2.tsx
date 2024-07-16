@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState} from 'react'
 
 import useRegistrationStore from '@/hooks/auth/useRegistrationStore';
 
@@ -18,14 +18,18 @@ const Step2 = () => {
     /**  Include State Management Here */
     const { formData, updateFormData, setCurrentStep } = useRegistrationStore();
     const [showDatePicker, setShowDatePicker] = useState(false);
+
     const [age, setAge] = useState(formData.age);
+    const [isAgeValid, setIsAgeValid] = useState(true);
 
     const [currentWeight, setCurrentWeight] = useState(formData.currentWeight);
+    const [isWeightValid, setIsWeightValid] = useState(true);
 
     const [height, setHeight] = useState(formData.height);
+    const [isHeightValid, setIsHeightValid] = useState(true);
 
     const [location, setLocation] = useState(formData.location);
-    
+
     const [isDisabled, setIsDisabled] = useState(true);
 
     const handlePrevious = () => {
@@ -42,33 +46,48 @@ const Step2 = () => {
         setShowDatePicker(false);
         updateFormData({ dateOfBirth: currentDate });
 
-        if(currentDate) {
-           const calculatedAge = differenceInYears(new Date(), new Date(currentDate));
-           setAge(calculatedAge); 
+        if (currentDate) {
+            const calculatedAge = differenceInYears(new Date(), new Date(currentDate));
+            setAge(calculatedAge);
+            setIsAgeValid(calculatedAge >= 16);
         }
     }
 
     const handleCurrentWeightChange = (value: string) => {
         setCurrentWeight(value);
+
+        // Validate the weight
+        const numericValue = parseFloat(value);
+        const isValid = value.trim() !== '' && (!isNaN(numericValue) && numericValue >= 14 && numericValue <= 453);
+
+        setIsWeightValid(isValid);
     }
 
     const handleHeightChange = (value: string) => {
         setHeight(value);
-    }
+    
+        const numericValue = parseFloat(value);
+        const isValid = value.trim() !== '' && (!isNaN(numericValue) && numericValue >= 60 && numericValue <= 277);
+    
+        setIsHeightValid(isValid);
+    };
 
     const handleLocationSelection = (value: string) => {
         setLocation(value);
     }
 
-    useEffect(() => {
-        setIsDisabled(!formData.dateOfBirth || !currentWeight || !height || !location);
+    const handleDateOfBirthChange = (value : Date) => {
 
+    }
+
+    useEffect(() => {
+        setIsDisabled(!formData.dateOfBirth || !isWeightValid || !isHeightValid || !location);
         //dynamically update age on component mount or when age changes
-        if(formData.dateOfBirth) {
+        if (formData.dateOfBirth) {
             const calculatedAge = differenceInYears(new Date(), new Date(formData.dateOfBirth));
             setAge(calculatedAge);
         }
-    },  [currentWeight, height, location]);
+    }, [currentWeight, height, location]);
 
     const [countryData, setCountryData] = useState<{ value: any; label: any; }[]>([]);;
     useEffect(() => {
@@ -82,7 +101,7 @@ const Step2 = () => {
 
         axios(config)
             .then(function (response) {
-                console.log(JSON.stringify(response.data));
+                // console.log(JSON.stringify(response.data));
                 let count = Object.keys(response.data).length;
                 let countryArray: { value: any; label: any; }[] = [];
                 for (let idx = 0; idx < count; idx++) {
@@ -116,11 +135,15 @@ const Step2 = () => {
             >
                 {formData.dateOfBirth ? format(formData.dateOfBirth, 'dd/MM/yyyy') : 'Select Date of Birth'}
             </Button>
-            
+
+            {!isAgeValid && (
+                <Text className='flex self-start -mt-2 text-red-500'> <Text className='font-bold'>Invalid Age:</Text> You must be at least 16 years old </Text>
+            )}
+
 
             {/* Current Weight Input */}
             <Text className='text-neutral-500'>Weight</Text>
-            <View className='flex-row items-center mt-2'>
+            <View className='flex-row items-end mt-2'>
                 <TextInput
                     label="Current Weight (kg)"
                     mode='outlined'
@@ -129,8 +152,13 @@ const Step2 = () => {
                     keyboardType='numeric'
                     value={currentWeight}
                     onChangeText={handleCurrentWeightChange}
+                    error={!isWeightValid}
                 />
             </View>
+
+            {!isWeightValid && (
+                <Text className='flex self-start -mt-2 text-red-500 font-bold'> Invalid Weight </Text>
+            )}
 
             {/* Height Input */}
             <Text className='text-neutral-500'>Height</Text>
@@ -143,16 +171,26 @@ const Step2 = () => {
                     keyboardType='numeric'
                     value={height}
                     onChangeText={handleHeightChange}
+                    error={!isHeightValid}
                 />
             </View>
+             
+            {!isHeightValid && (
+                <Text className='flex self-start -mt-2 text-red-500 font-bold'> Invalid Height </Text>
+            )}
+
+
+
             {/* Location Input */}
             <Text className='text-neutral-500'>Location</Text>
             <View className='mt-2 w-full'>
                 <RNPickerSelect
-                    style={{ placeholder: {
-                        color: "gray"
-                    }}}
-                    placeholder={{ label: "Select your Location...", value: null}}
+                    style={{
+                        placeholder: {
+                            color: "gray"
+                        }
+                    }}
+                    placeholder={{ label: "Select your Location...", value: null }}
                     items={countryData}
                     onValueChange={handleLocationSelection}
                     value={location}
