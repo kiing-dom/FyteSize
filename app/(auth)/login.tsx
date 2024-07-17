@@ -1,15 +1,56 @@
 import useRegistrationStore from '@/hooks/auth/useRegistrationStore';
 import { router } from 'expo-router';
-import React from 'react';
+import React, { useState } from 'react';
 
-import { View, Text, SafeAreaView, ScrollView, Image } from 'react-native'
-import { TextInput, Button } from 'react-native-paper';
+import { View, Text, SafeAreaView, ScrollView, Image, Alert } from 'react-native'
+import { TextInput, Button, Snackbar } from 'react-native-paper';
+
+import { auth } from '../../firebaseConfig';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { FirebaseError } from 'firebase/app';
 
 
 const LoginScreen = () => {
 
   /**  Include State Management Here */
   const { setCurrentStep } = useRegistrationStore();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+
+  const handleLogin = async () => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      setSnackbarMessage('Login Successful');
+      setSnackbarVisible(true);
+
+      setTimeout(() => {
+        router.push('/home')
+      }, 2000)
+
+    } catch (error: any) {
+      console.log("Login Error", error);
+
+      let errorMessage = "An error occurred";
+      if (error instanceof FirebaseError) {
+        errorMessage = `${error.code}: ${error.message}`;
+      } else if (typeof error === 'string') {
+        errorMessage = error;
+      }
+
+
+      Alert.alert(
+        "Login Failed",
+        errorMessage,
+        [{ text: "CLOSE", style: "cancel" }],
+        { cancelable: true }
+      );
+    }
+  }
 
   const handleRegisterPress = () => {
     setCurrentStep(1);
@@ -29,7 +70,8 @@ const LoginScreen = () => {
             className='w-[80%] -mt-8 mb-2'
             mode='outlined'
             label="Email"
-            value={""}
+            value={email}
+            onChangeText={(text) => setEmail(text)}
             activeOutlineColor='black'
             keyboardType='email-address'
           />
@@ -37,7 +79,8 @@ const LoginScreen = () => {
             className='w-[80%] mb-4'
             mode='outlined'
             label="Password"
-            value={""}
+            value={password}
+            onChangeText={(text) => setPassword(text)}
             activeOutlineColor='black'
             secureTextEntry={true}
           />
@@ -45,6 +88,7 @@ const LoginScreen = () => {
             mode='contained'
             className='w-[80%] mb-2 bg-black'
             labelStyle={{ fontSize: 20 }}
+            onPress={handleLogin}
           >
             Login
           </Button>
@@ -52,10 +96,19 @@ const LoginScreen = () => {
             Dont have an account? <Text onPress={handleRegisterPress} className='text-blue-500 font-bold'>Register</Text>
           </Text>
 
+
+          <Snackbar
+            visible={snackbarVisible}
+            onDismiss={() => setSnackbarVisible(false)}
+            duration={2000}
+          >
+            {snackbarMessage}
+          </Snackbar>
+
         </View>
       </ScrollView>
     </SafeAreaView>
   )
 }
 
-export default LoginScreen
+export default LoginScreen;
