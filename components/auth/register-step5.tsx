@@ -11,22 +11,22 @@ import CryptoJS from 'crypto-js';
 
 
 const Step5 = () => {
-    const { formData, setCurrentStep, updateFormData } = useRegistrationStore();
+    const { formData, setCurrentStep, updateFormData, clearFormData } = useRegistrationStore();
 
     const [firstName, setFirstName] = useState(formData.firstName);
-    const [isFirstNameValid, setIsFirstNameValid] = useState(false);
+    const [isFirstNameValid, setIsFirstNameValid] = useState(true);
     const [firstNameError, setFirstNameError] = useState('');
 
     const [lastName, setLastName] = useState(formData.lastName);
-    const [isLastNameValid, setIsLastNameValid] = useState(false);
+    const [isLastNameValid, setIsLastNameValid] = useState(true);
     const [lastNameError, setLastNameError] = useState('');
 
     const [email, setEmail] = useState(formData.email);
-    const [isEmailValid, setIsEmailValid] = useState(false);
+    const [isEmailValid, setIsEmailValid] = useState(true);
     const [emailError, setEmailError] = useState('');
 
     const [password, setPassword] = useState(formData.password);
-    const [isPasswordValid, setIsPasswordValid] = useState(false);
+    const [isPasswordValid, setIsPasswordValid] = useState(true);
     const [passwordError, setPasswordError] = useState('');
 
     const [snackbarVisible, setSnackbarVisible] = useState(false);
@@ -94,12 +94,15 @@ const Step5 = () => {
                 bmr: formData.bmr,
                 tdee: formData.tdee
             });
-
-            router.push('/login')
             setSnackbarMessage('Registration Successful');
             setSnackbarColor('green');
             setSnackbarVisible(true);
 
+            setTimeout(() => {
+                router.push('/login');
+                clearFormData();
+            }, 2500);
+            
 
         } catch (error) {
             console.error(error);
@@ -220,7 +223,7 @@ const Step5 = () => {
                     mode='contained'
                     onPress={handleRegistration}
                     buttonColor='blue'
-                    disabled={!isFirstNameValid || !isLastNameValid || !isEmailValid || !isPasswordValid}
+                    disabled={(!isFirstNameValid && firstName.length > 0) || (!isLastNameValid && lastName.length > 0) || (!isEmailValid && email.length > 0) || (!isPasswordValid && password.length > 0)}
                 >
                     Create Account
                 </Button>
