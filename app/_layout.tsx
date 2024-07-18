@@ -2,8 +2,9 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
+import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 
@@ -15,6 +16,26 @@ export default function RootLayout() {
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
+
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const auth = getAuth();
+
+    console.log('useEffect - onAuthStateChanged: Setting up listener');
+
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      console.log('onAuthStateChanged: User state changed', firebaseUser);
+      setUser(firebaseUser);
+    });
+
+    console.log('useEffect - onAuthStateChanged: Listener set up');
+
+    return () => {
+      console.log('useEffect cleanup: Cleaning up listener');
+      unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     if (loaded) {
@@ -29,10 +50,12 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
-        <Stack.Screen name='index' options={{ headerShown: false }} />
-        <Stack.Screen name='(auth)' options={{ headerShown: false }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: true }} />
-        <Stack.Screen name="+not-found" />
+        {user ? (
+          <Stack.Screen name='(tabs)' options={{ headerShown: true }} />
+        ) : (
+          <Stack.Screen name='(auth)' options={{ headerShown: false }} />
+        )}
+        <Stack.Screen name='+not-found' />
       </Stack>
     </ThemeProvider>
   );
