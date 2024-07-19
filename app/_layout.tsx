@@ -25,7 +25,6 @@ export default function RootLayout() {
     console.log('useEffect - onAuthStateChanged: Setting up listener');
 
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      console.log('onAuthStateChanged: User state changed', firebaseUser);
       setUser(firebaseUser);
     });
 
