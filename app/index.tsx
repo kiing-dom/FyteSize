@@ -1,10 +1,6 @@
-import { Link, useRouter } from "expo-router";
-import { styled } from "nativewind";
+import { useRouter, router } from "expo-router";
 import { View, Text, ScrollView } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context'
-
-import { router } from "expo-router";
-
 import { Button } from '@rneui/themed';
 
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -16,26 +12,25 @@ export default function OnboardingScreen() {
 
   const router = useRouter();
 
-  const [isLoading, setIsLoading] = useState(true); // State to track loading state
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const auth = getAuth(); // Initialize auth from Firebase Modular SDK
+    const auth = getAuth();
 
     const unsubscribe = onAuthStateChanged(auth, user => {
-      setIsLoading(false); // Set loading to false when auth state is determined
+      setIsLoading(false); 
       if (user) {
-        router.replace("/home"); // Redirect to home if user is authenticated
+        router.replace("/home"); 
       }
-      // No need for an else case, as the component will render the onboarding UI until redirected
     });
 
-    return unsubscribe; // Cleanup function to unsubscribe from onAuthStateChanged
+    return unsubscribe;
   }, [router]);
 
   if (isLoading) {
     return (
-      <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="blue" />
+      <SafeAreaView className="flex-1 justify-center items-center">
+        <ActivityIndicator size="large" color="black" />
       </SafeAreaView>
     );
   }
