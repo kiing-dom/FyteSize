@@ -50,12 +50,12 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         {user ? (
-          <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+          <Stack.Screen name='(tabs)' options={{ headerShown: false, gestureEnabled: false, }} />
         ) : (
-          <Stack.Screen name='index' options={{ headerShown: false }} />
+          <Stack.Screen name='index' options={{ headerShown: false, gestureEnabled: false, }} />
         )}
         <Stack.Screen name='+not-found' />
-        <Stack.Screen name='(auth)' options={{ headerShown: false}} />
+        <Stack.Screen name='(auth)' options={{ headerShown: false, gestureEnabled: false, }} />
       </Stack>
     </ThemeProvider>
   );
